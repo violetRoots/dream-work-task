@@ -51,6 +51,8 @@ MonoBehaviour:
   playerBulletsPool: {fileID: 5618080708454624351}
   ufoBulletsPool: {fileID: 5618080706529791143}
   asteroidsPool: {fileID: 5618080708671609481}
+  player: {fileID: 5618080707265948311}
+  obstaclesSpawner: {fileID: 5618080707313607096}
 --- !u!1 &5618080706529791142
 GameObject:
   m_ObjectHideFlags: 0

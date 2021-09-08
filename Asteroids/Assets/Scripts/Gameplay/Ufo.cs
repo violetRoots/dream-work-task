@@ -8,7 +8,6 @@ public class Ufo : MonoBehaviour
     [SerializeField] private float minShootInterval = 2, maxShootInterval = 5;
     [SerializeField] private int cost = 200;
 
-    private BasePool _bulletsPool;
     private PlayerController _player;
     private Rigidbody _rigidbody;
     private bool _isShooting = true;
@@ -20,7 +19,6 @@ public class Ufo : MonoBehaviour
 
     private void Start()
     {
-        _bulletsPool = LevelManager.Instance.UfoBulletsPool;
         _player = FindObjectOfType<PlayerController>();
         StartCoroutine(ShootPorcess());
     }
@@ -31,6 +29,7 @@ public class Ufo : MonoBehaviour
         {
             bullet.HideBullet();
 
+            LevelManager.Instance.AddScorePoints(cost);
             Die();
         }
     }
@@ -43,7 +42,6 @@ public class Ufo : MonoBehaviour
 
     public void Die()
     {
-        LevelManager.Instance.AddScorePoints(cost);
         Destroy(gameObject);
     }
 
@@ -61,7 +59,7 @@ public class Ufo : MonoBehaviour
     {
         if (!_player) return;
 
-        var bullet = _bulletsPool.PopObject<Bullet>();
+        var bullet = LevelManager.Instance.UfoBulletsPool.PopObject<Bullet>();
         bullet.gameObject.SetActive(true);
         bullet.transform.position = transform.position;
 

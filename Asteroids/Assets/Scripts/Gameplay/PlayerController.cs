@@ -27,7 +27,6 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody _rigidbody;
     private Camera _camera;
-    private BasePool _bulletsPool;
     private int _shotsPerSecond;
     private float _lastShotTime;
     private bool _isInvulnerable;
@@ -35,7 +34,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        _bulletsPool = LevelManager.Instance.PlayerBulletsPool;
         _rigidbody = GetComponent<Rigidbody>();
         _camera = Camera.main;
 
@@ -130,7 +128,7 @@ public class PlayerController : MonoBehaviour
 
         if (_shotsPerSecond >= maxShotsPerSecond) return;
 
-        var bullet = _bulletsPool.PopObject<Bullet>();
+        var bullet = LevelManager.Instance.PlayerBulletsPool.PopObject<Bullet>();
         bullet.gameObject.SetActive(true);
         bullet.transform.position = forwardObj.position;
         bullet.transform.rotation = transform.rotation;

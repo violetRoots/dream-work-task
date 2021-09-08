@@ -8,22 +8,15 @@ public class LevelManager : Singleton<LevelManager>
     public BasePool PlayerBulletsPool => playerBulletsPool;
     public BasePool AsteroidsPool => asteroidsPool;
     public BasePool UfoBulletsPool => ufoBulletsPool;
-    public PlayerController Player => _player;
+    public PlayerController Player => player;
 
     [SerializeField] private BasePool playerBulletsPool;
     [SerializeField] private BasePool ufoBulletsPool;
     [SerializeField] private BasePool asteroidsPool;
+    [SerializeField] private PlayerController player;
+    [SerializeField] private ObstaclesSpawner obstaclesSpawner;
 
-    private PlayerController _player;
-    private ObstaclesSpawner _obstaclesSpawner;
     private int _score;
-
-    public override void Awake()
-    {
-        base.Awake();
-        _obstaclesSpawner = GetComponentInChildren<ObstaclesSpawner>();
-        _player = GetComponentInChildren<PlayerController>();
-    }
 
     private void Start()
     {
@@ -32,7 +25,7 @@ public class LevelManager : Singleton<LevelManager>
 
     public void OnRoundEnd()
     {
-        _obstaclesSpawner.NewRoundSpawnAsteroids();
+        obstaclesSpawner.NewRoundSpawnAsteroids();
     }
     public void AddScorePoints(int value)
     {

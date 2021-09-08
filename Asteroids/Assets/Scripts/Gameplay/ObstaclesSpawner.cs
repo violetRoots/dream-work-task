@@ -12,18 +12,17 @@ public class ObstaclesSpawner : MonoBehaviour
     [Space]
     [SerializeField] private Ufo ufoPrefab;
 
+    private Ufo _ufo;
     private float _height, _width;
-    private BasePool _asteroidsPool;
     private int _roundAsteroidsCount;
     private bool _isSpawnUfo = true;
 
     private void Start()
     {
-        _height = ScreenController.Height;
-        _width = ScreenController.Width;
+        _height = ScreenController.Height / 2;
+        _width = ScreenController.Width / 2;
         _roundAsteroidsCount = startAsteroidsCount;
 
-        _asteroidsPool = LevelManager.Instance.AsteroidsPool;
         SpawnAsteroids(0);
 
         StartCoroutine(SpawnUfoProcess());
@@ -52,10 +51,10 @@ public class ObstaclesSpawner : MonoBehaviour
 
     private void SpawnAsteroid()
     {
-        var asteroid = _asteroidsPool.PopObject<Asteroid>();
+        var asteroid = LevelManager.Instance.AsteroidsPool.PopObject<Asteroid>();
         asteroid.SetStage(1);
         asteroid.gameObject.SetActive(true);
-        asteroid.transform.position = new Vector3(Random.Range(-_width / 2, _width / 2), 0, Random.Range(-_height / 2, _height / 2));
+        asteroid.transform.position = new Vector3(Random.Range(-_width, _width), 0, Random.Range(-_height, _height));
     }
 
     private IEnumerator SpawnUfoProcess()
@@ -70,12 +69,13 @@ public class ObstaclesSpawner : MonoBehaviour
 
     private void SpawnUfo()
     {
-        var sideProp = Random.Range(0.0f, 1.0f);;
-        var side = sideProp < 0.5f ? -1 : 1;
+        if (_ufo) return;
 
-        var zConstraint = (ScreenController.Height / 2) * UfoSpawnConstraintMultiolier;
-        var spawnPosition = new Vector3(side * ScreenController.Width / 2, 0, Random.Range(-zConstraint, zConstraint));
-        var ufo = Instantiate(ufoPrefab, spawnPosition, Quaternion.identity);
-        ufo.StartMovement(-side);
+        var side = Random.value < 0.5f ? -1 : 1;
+
+        var zConstraint = _height * UfoSpawnConstraintMultiolier;
+        var spawnPosition = new Vector3(side * _width, 0, Random.Range(-zConstraint, zConstraint));
+        _ufo = Instantiate(ufoPrefab, spawnPosition, Quaternion.identity, LevelManager.Instance.transform);
+        _ufo.StartMovement(-side);
     }
 }

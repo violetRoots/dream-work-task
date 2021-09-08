@@ -7,6 +7,7 @@ public class Asteroid : MonoBehaviour
     private const int MaxStagesCount = 3;
 
     [SerializeField] private float startMinVelocity = 0.5f, startMaxVelocity = 3.0f;
+    [SerializeField] private float minNewAsteroidVelocityMultiplier = 0.5f, maxNewAsteroidVelocityMultiplier = 1.5f;
     [SerializeField] private int[] stagesCosts = new int[MaxStagesCount];
 
     private BasePool _asteroidsPool;
@@ -15,7 +16,7 @@ public class Asteroid : MonoBehaviour
 
     private void Start()
     {
-        _asteroidsPool = GetComponentInParent<BasePool>();
+        _asteroidsPool = LevelManager.Instance.AsteroidsPool;
         _rigidbody = GetComponent<Rigidbody>();
 
         var randomForce = new Vector3(Random.Range(startMinVelocity, startMaxVelocity), 0, Random.Range(startMinVelocity, startMaxVelocity));
@@ -24,11 +25,11 @@ public class Asteroid : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent(out Bullet bullet))
+        if(other.TryGetComponent(out PLayerBullet bullet))
         {
             if(_stage < MaxStagesCount)
             {
-                var velocityMultiplier = Random.Range(0.5f, 1.5f);
+                var velocityMultiplier = Random.Range(minNewAsteroidVelocityMultiplier, maxNewAsteroidVelocityMultiplier);
                 ShowNewAsteroid(45, velocityMultiplier);
                 ShowNewAsteroid(-45, velocityMultiplier);
             }

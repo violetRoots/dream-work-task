@@ -6,18 +6,19 @@ public class Bullet : MonoBehaviour
 {
     [SerializeField] private float speed = 1.0f;
 
+    private SpaceObject _spaceObject;
     private Rigidbody _rigidbody;
     private BasePool _bulletsPool;
     private Vector3 _previousPosition;
-    private float _pathLength;
     private float _screenWidth;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _spaceObject = GetComponent<SpaceObject>();
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         _screenWidth = ScreenController.Width;
         _bulletsPool = GetComponentInParent<BasePool>();
@@ -25,17 +26,14 @@ public class Bullet : MonoBehaviour
 
     private void Update()
     {
-        _pathLength += Vector3.Distance(_previousPosition, transform.position);
-        _previousPosition = transform.position;
-
-        if (_pathLength <= _screenWidth) return;
+        if (_spaceObject.PathLength <= _screenWidth) return;
 
         HideBullet();
     }
 
     public void HideBullet()
     {
-        _pathLength = 0;
+        _spaceObject.ResetPath();
         gameObject.SetActive(false);
         _bulletsPool.PushObject(gameObject);
     }
